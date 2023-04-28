@@ -1,4 +1,8 @@
-﻿namespace MyNotepad
+﻿using System;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+
+namespace MyNotepad
 {
     partial class Form1
     {
@@ -36,10 +40,47 @@
             this.Load += Empty_File_Load;
 
             this.FormClosing += Ask_Save;
+
+            this.SizeChanged += ChangeSize;
+
+            menu = new MenuStrip();
+            ToolStripMenuItem fileItem = new ToolStripMenuItem();
+            fileItem.ShowShortcutKeys = true;
+            fileItem.Text = "File";
+            fileItem.DropDownItems.Add(new ToolStripMenuItem("New", null, new EventHandler((s, e) => box.Text = "")) { ShortcutKeys = Keys.Control | Keys.N });
+            fileItem.DropDownItems.Add(new ToolStripMenuItem("Open", null, OpenBtn_Click) { ShortcutKeys = Keys.Control | Keys.O });
+            fileItem.DropDownItems.Add(new ToolStripMenuItem("Save", null, Ask_Save) { ShortcutKeys = Keys.Control | Keys.S });
+            fileItem.DropDownItems.Add(new ToolStripSeparator());
+            fileItem.DropDownItems.Add(new ToolStripMenuItem("Exit", null, new EventHandler((s, e) => this.Close())));
+
+            menu.Items.Add(fileItem);
+
+            ToolStripMenuItem windowItem = new ToolStripMenuItem();
+            windowItem.ShowShortcutKeys = true;
+            windowItem.Text = "Window";
+            windowItem.DropDownItems.Add(new ToolStripMenuItem("Window Color", null, WindowColorBtn_Click) { ShortcutKeys = Keys.Control | Keys.C | Keys.O });
+            windowItem.DropDownItems.Add(new ToolStripMenuItem("Text Color", null, TextColorBtn_Click) { ShortcutKeys = Keys.Control | Keys.C | Keys.O });
+            menu.Items.Add(windowItem);
+
+            ToolStripComboBox fontSize = new ToolStripComboBox();
+            fontSize.Items.Add("Small");
+            fontSize.Items.Add("Medium");
+            fontSize.Items.Add("Large");
+            fontSize.SelectedIndex = 0;
+            fontSize.SelectedIndexChanged += FontSize_SelectedIndexChanged;
+
+            menu.Items.Add(fontSize);
+
+
+            this.Controls.Add(menu);
+            
         }
 
         
 
+        MenuStrip menu;
+
+        CheckBox nightTheme;
         #endregion
     }
 }
